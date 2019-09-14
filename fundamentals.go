@@ -1,6 +1,8 @@
 package robinhood
 
-import "strings"
+import (
+	"strings"
+)
 
 type Fundamental struct {
 	Open          float64 `json:"open,string"`
@@ -19,6 +21,9 @@ type Fundamental struct {
 
 // GetFundamentals returns fundemental data for the list of stocks provided.
 func (c *Client) GetFundamentals(stocks ...string) ([]Fundamental, error) {
+	for i := 0 ; i < len(stocks) ; i++ {
+                stocks[i] = strings.ToUpper(stocks[i])
+        }
 	url := EPFundamentals + "?symbols=" + strings.Join(stocks, ",")
 	var r struct{ Results []Fundamental }
 	err := c.GetAndDecode(url, &r)
